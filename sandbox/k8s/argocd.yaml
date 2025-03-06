@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+    name: gitops-demo-app
+    namespace: argocd
+spec:
+    project: default
+
+    source:
+        repoURL: https://github.com/SazzadR/gitops-demo-app-infrastructure.git
+        targetRevision: HEAD
+        path: sandbox/k8s/apps
+    destination:
+        server: https://kubernetes.default.svc
+        namespace: gitops-demo-app
+
+    syncPolicy:
+        syncOptions:
+            - CreateNamespace=true
+
+        automated:
+            selfHeal: true
+            prune: true
